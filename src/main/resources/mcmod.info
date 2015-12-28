@@ -1,0 +1,16 @@
+[
+{
+  "modid": "MixinExamples",
+  "name": "Mixin Examples",
+  "description": "",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["joserobjr"],
+  "credits": "",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]
