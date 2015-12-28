@@ -12,6 +12,7 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ChatComponentText;
@@ -171,6 +172,33 @@ public class MixinExampleMod extends DummyModContainer
                 else
                     sender.addChatMessage(new ChatComponentText("You don't have a custom int value")
                             .setChatStyle(new ChatStyle().setColor(EnumChatFormatting.RED)));
+            }
+        });
+
+        event.registerServerCommand(new CommandBase()
+        {
+            @Override
+            public String getCommandName()
+            {
+                return "closescreen";
+            }
+
+            @Override
+            public boolean canCommandSenderUseCommand(ICommandSender sender)
+            {
+                return sender instanceof EntityPlayer;
+            }
+
+            @Override
+            public String getCommandUsage(ICommandSender sender)
+            {
+                return "/closescreen";
+            }
+
+            @Override
+            public void processCommand(ICommandSender sender, String[] args)
+            {
+                ((EntityPlayer)sender).closeScreen();
             }
         });
     }

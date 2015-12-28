@@ -1,6 +1,7 @@
 {
   "package":"br.com.gamemods.mixinexamples.mixins",
   "mixins":[
-    "MixinEntityPlayer"
+    "MixinEntityPlayer",
+    "MixinEntityPlayerMP"
   ]
 }
