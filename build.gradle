@@ -21,10 +21,41 @@ version = "1.0-SNAPSHOT"
 group= "br.com.gamemods" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "MixinExamples"
 
+ext {
+    mixinSrg = new File(project.buildDir, 'tmp/mixins/mixins.examples.srg')
+    mixinRefMap = new File(project.buildDir, "tmp/mixins/mixins.examples.refmap.json")
+}
+
+reobf.addExtraSrgFile project.mixinSrg
+
 minecraft {
     version = "1.7.10-10.13.4.1614-1.7.10"
     runDir = "eclipse"
 }
+
+compileJava {
+    options.compilerArgs += [
+            '-Xlint:-processing',
+            "-AoutSrgFile=${project.mixinSrg.canonicalPath}",
+            "-AoutRefMapFile=${project.mixinRefMap.canonicalPath}",
+            "-AreobfSrgFile=${project.file('build/srgs/mcp-srg.srg').canonicalPath}"
+    ]
+}
+
+afterEvaluate {
+    tasks.compileJava.options.compilerArgs += "-AreobfSrgFile=${tasks.reobf.srg}"
+}
+
+task copySrgs(type: Copy, dependsOn: 'genSrgs') {
+    from plugins.getPlugin("forge").delayedFile('{SRG_DIR}')
+
+    include '**/*.srg'
+    into 'build/srgs'
+}
+
+setupDecompWorkspace.dependsOn copySrgs
+setupDevWorkspace.dependsOn copySrgs
+compileJava.dependsOn copySrgs
 
 configurations {
     shade
@@ -46,6 +77,8 @@ dependencies {
 }
 
 jar {
+    from project.mixinRefMap
+
     manifest {
         attributes 'FMLCorePlugin': 'br.com.gamemods.mixinexamples.MixinExampleCore',
                 'FMLCorePluginContainsFMLMod': 'true',

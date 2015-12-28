@@ -3,5 +3,6 @@
   "mixins":[
     "MixinEntityPlayer",
     "MixinEntityPlayerMP"
-  ]
+  ],
+  "refmap":"mixins.examples.refmap.json"
 }
