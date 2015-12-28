@@ -26,26 +26,38 @@ minecraft {
     runDir = "eclipse"
 }
 
+configurations {
+    shade
+    compile.extendsFrom shade
+}
+
+repositories {
+    maven {
+        name = "SpongePowered"
+        url = "https://repo.spongepowered.org/maven"
+    }
+}
+
 dependencies {
-    // you may put jars on which you depend on in ./libs
-    // or you may define them like so..
-    //compile "some.group:artifact:version:classifier"
-    //compile "some.group:artifact:version"
-      
-    // real examples
-    //compile 'com.mod-buildcraft:buildcraft:6.0.8:dev'  // adds buildcraft to the dev env
-    //compile 'com.googlecode.efficient-java-matrix-library:ejml:0.24' // adds ejml to the dev env
-
-    // for more info...
-    // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
-    // http://www.gradle.org/docs/current/userguide/dependency_management.html
-
+    shade("org.spongepowered:mixin:0.4.4-SNAPSHOT"){
+        exclude module: 'launchwrapper'
+        exclude module: 'guava'
+    }
 }
 
 jar {
     manifest {
         attributes 'FMLCorePlugin': 'br.com.gamemods.mixinexamples.MixinExampleCore',
-                'FMLCorePluginContainsFMLMod': 'true'
+                'FMLCorePluginContainsFMLMod': 'true',
+                'TweakClass': 'org.spongepowered.asm.launch.MixinTweaker',
+                'TweakOrder': '0',
+                'MixinConfigs': 'mixins-examples.json'
+    }
+
+    configurations.shade.each { dep ->
+        from(project.zipTree(dep)){
+            include 'org/spongepowered', 'org/spongepowered/**'
+        }
     }
 }
 
