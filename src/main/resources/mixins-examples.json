@@ -2,7 +2,8 @@
   "package":"br.com.gamemods.mixinexamples.mixins",
   "mixins":[
     "MixinEntityPlayer",
-    "MixinEntityPlayerMP"
+    "MixinEntityPlayerMP",
+    "MixinTileEntitySign"
   ],
   "refmap":"mixins.examples.refmap.json"
 }
